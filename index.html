@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="responsive.css">
+  <title>To-Do List</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #e9d3c6;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background-color: #958381;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .title {
+      text-align: center;
+      font-size: 2.5rem;
+      color: #d9c6b3;
+      margin-bottom: 30px;
+    }
+
+    .input-container {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .input-field {
+      flex: 1;
+      padding: 15px;
+      border: 2px solid #dac0b1;
+      border-radius: 5px;
+      margin-right: 10px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    .input-field:focus {
+      border-color: #dac0b1;
+      outline: none;
+    }
+
+    .add-btn {
+      padding: 15px 20px;
+      background-color: #dac0b1;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .add-btn:hover {
+      background-color: #cd2424;
+    }
+
+    .task-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .task-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      background-color: #f9fafb;
+      border: 1px solid #e2e8f0;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      transition: background-color 0.3s;
+    }
+
+    .task-item:hover {
+      background-color: #f3f4f6;
+    }
+
+    .task-item.completed {
+      background-color: #e2e8f0;
+    }
+
+    .task-item.completed .task-text {
+      text-decoration: line-through;
+      color: #9ca3af;
+    }
+
+    .task-text {
+      font-size: 1.1rem;
+      color: #333;
+    }
+
+    .task-time {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-left: 10px;
+    }
+
+    .remove-btn {
+      background-color: #ef4444;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .remove-btn:hover {
+      background-color: #dc2626;
+    }
+
+    .footer {
+      background-color: #ba9d96;
+      color: #ffffff;
+      text-align: center;
+      padding: 10px 0;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+
+    .color-picker {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">To-Do List</h1>
+    <div class="input-container">
+      <input type="text" id="task-input" placeholder="Add a new task" class="input-field">
+      <input type="time" id="task-time" class="input-field">
+      <input type="color" id="task-color" class="color-picker" value="#ffffff">
+      <button id="add-task-btn" class="add-btn">Add</button>
+    </div>
+    <ul id="task-list" class="task-list"></ul>
+  </div>
+  <footer class="footer">
+    <p> To-Do List App © 2025 Zeyad Gaber | All Rights Reserved </p>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const taskInput = document.getElementById('task-input');
+      const taskTimeInput = document.getElementById('task-time');
+      const taskColorInput = document.getElementById('task-color');
+      const addTaskBtn = document.getElementById('add-task-btn');
+      const taskList = document.getElementById('task-list');
+
+      addTaskBtn.addEventListener('click', addTask);
+      taskInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          addTask();
+        }
+      });
+
+      function addTask() {
+        const taskText = taskInput.value.trim();
+        const taskTime = taskTimeInput.value;
+        const taskColor = taskColorInput.value;
+
+        if (taskText === '') {
+          return;
+        }
+
+        const taskItem = document.createElement('li');
+        taskItem.className = 'task-item';
+        taskItem.style.backgroundColor = taskColor;
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'task-checkbox';
+        checkbox.addEventListener('change', () => {
+          taskItem.classList.toggle('completed');
+        });
+
+        const taskTextSpan = document.createElement('span');
+        taskTextSpan.className = 'task-text';
+        taskTextSpan.textContent = taskText;
+
+        const taskTimeSpan = document.createElement('span');
+        taskTimeSpan.className = 'task-time';
+        taskTimeSpan.textContent = taskTime;
+
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-btn';
+        removeBtn.textContent = 'Remove';
+        removeBtn.addEventListener('click', () => {
+          taskList.removeChild(taskItem);
+        });
+
+        taskItem.appendChild(checkbox);
+        taskItem.appendChild(taskTextSpan);
+        taskItem.appendChild(taskTimeSpan);
+        taskItem.appendChild(removeBtn);
+
+        taskList.appendChild(taskItem);
+        taskInput.value = '';
+        taskTimeInput.value = '';
+        taskColorInput.value = '#ffffff';
+      }
+    });
+  </script>
+</body>
+</html>
